@@ -10,62 +10,774 @@ const { Content } = await latestPost.render();
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="generator" content={Astro.generator} />
-		<title>The Daily Spud</title>
+		<meta name="description" content="The Daily Spud — AI news & absurdist cartoons, delivered by an agent. Subscribe for your daily briefing." />
+		<title>The Daily Spud 🥔</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+		<style is:global>
+			/* ===== RESET & BASE ===== */
+			*, *::before, *::after {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			:root {
+				--spud-cream: #FDF6E3;
+				--spud-warm: #F5E6C8;
+				--spud-gold: #D4A853;
+				--spud-amber: #C4922A;
+				--spud-brown: #8B6914;
+				--spud-dark: #1A1207;
+				--spud-charcoal: #2D2416;
+				--spud-text: #3D2E1A;
+				--spud-muted: #9B8A6E;
+				--spud-green: #4A7C59;
+				--spud-green-light: #5E9E72;
+				--spud-red: #C44B3F;
+				--spud-white: #FFFDF8;
+				--radius: 16px;
+				--radius-sm: 10px;
+				--shadow-sm: 0 2px 8px rgba(26,18,7,0.06);
+				--shadow-md: 0 4px 24px rgba(26,18,7,0.08);
+				--shadow-lg: 0 8px 40px rgba(26,18,7,0.12);
+				--shadow-brutal: 5px 5px 0px var(--spud-dark);
+				--transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+			}
+
+			html {
+				scroll-behavior: smooth;
+				-webkit-font-smoothing: antialiased;
+				-moz-osx-font-smoothing: grayscale;
+			}
+
+			body {
+				font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+				background: var(--spud-cream);
+				color: var(--spud-text);
+				line-height: 1.7;
+				min-height: 100vh;
+				overflow-x: hidden;
+			}
+
+			/* ===== BACKGROUND TEXTURE ===== */
+			body::before {
+				content: '';
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-image: 
+					radial-gradient(circle at 20% 50%, rgba(212,168,83,0.08) 0%, transparent 50%),
+					radial-gradient(circle at 80% 20%, rgba(196,146,42,0.06) 0%, transparent 50%),
+					radial-gradient(circle at 50% 80%, rgba(139,105,20,0.04) 0%, transparent 50%);
+				pointer-events: none;
+				z-index: 0;
+			}
+
+			/* ===== GRAIN OVERLAY ===== */
+			body::after {
+				content: '';
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				opacity: 0.025;
+				background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+				pointer-events: none;
+				z-index: 0;
+			}
+
+			/* ===== LAYOUT ===== */
+			.page-wrapper {
+				position: relative;
+				z-index: 1;
+				max-width: 720px;
+				margin: 0 auto;
+				padding: 0 24px;
+			}
+
+			/* ===== HERO / HEADER ===== */
+			.hero {
+				padding: 80px 0 48px;
+				text-align: center;
+				position: relative;
+			}
+
+			.hero-badge {
+				display: inline-flex;
+				align-items: center;
+				gap: 6px;
+				background: var(--spud-dark);
+				color: var(--spud-gold);
+				font-size: 0.75rem;
+				font-weight: 600;
+				letter-spacing: 0.1em;
+				text-transform: uppercase;
+				padding: 6px 16px;
+				border-radius: 100px;
+				margin-bottom: 28px;
+			}
+
+			.hero-badge .dot {
+				width: 6px;
+				height: 6px;
+				background: var(--spud-green-light);
+				border-radius: 50%;
+				animation: pulse 2s ease-in-out infinite;
+			}
+
+			@keyframes pulse {
+				0%, 100% { opacity: 1; transform: scale(1); }
+				50% { opacity: 0.5; transform: scale(0.8); }
+			}
+
+			.hero-logo {
+				font-size: 4.5rem;
+				line-height: 1;
+				margin-bottom: 16px;
+				display: block;
+				animation: float 6s ease-in-out infinite;
+			}
+
+			@keyframes float {
+				0%, 100% { transform: translateY(0px) rotate(0deg); }
+				33% { transform: translateY(-6px) rotate(2deg); }
+				66% { transform: translateY(-3px) rotate(-1deg); }
+			}
+
+			.hero h1 {
+				font-family: 'Instrument Serif', Georgia, serif;
+				font-size: 4rem;
+				font-weight: 400;
+				line-height: 1.05;
+				letter-spacing: -0.03em;
+				color: var(--spud-dark);
+				margin-bottom: 16px;
+			}
+
+			.hero h1 em {
+				font-style: italic;
+				color: var(--spud-amber);
+			}
+
+			.hero-subtitle {
+				font-size: 1.2rem;
+				color: var(--spud-muted);
+				max-width: 480px;
+				margin: 0 auto;
+				line-height: 1.6;
+			}
+
+			/* ===== SUBSCRIBE CARD ===== */
+			.subscribe-card {
+				background: var(--spud-white);
+				border: 2px solid var(--spud-dark);
+				border-radius: var(--radius);
+				padding: 40px;
+				margin-bottom: 64px;
+				box-shadow: var(--shadow-brutal);
+				position: relative;
+				overflow: hidden;
+				transition: box-shadow var(--transition), transform var(--transition);
+			}
+
+			.subscribe-card:hover {
+				transform: translate(-1px, -1px);
+				box-shadow: 7px 7px 0px var(--spud-dark);
+			}
+
+			.subscribe-card::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				height: 4px;
+				background: linear-gradient(90deg, var(--spud-gold), var(--spud-amber), var(--spud-brown));
+			}
+
+			.subscribe-header {
+				text-align: center;
+				margin-bottom: 28px;
+			}
+
+			.subscribe-header h2 {
+				font-family: 'Instrument Serif', Georgia, serif;
+				font-size: 1.8rem;
+				font-weight: 400;
+				color: var(--spud-dark);
+				margin-bottom: 8px;
+			}
+
+			.subscribe-header p {
+				color: var(--spud-muted);
+				font-size: 0.95rem;
+			}
+
+			.subscribe-form {
+				display: flex;
+				gap: 10px;
+				max-width: 480px;
+				margin: 0 auto;
+			}
+
+			.subscribe-form input[type="email"] {
+				flex: 1;
+				padding: 14px 18px;
+				font-family: 'Space Grotesk', sans-serif;
+				font-size: 1rem;
+				border: 2px solid var(--spud-warm);
+				border-radius: var(--radius-sm);
+				background: var(--spud-cream);
+				color: var(--spud-dark);
+				outline: none;
+				transition: border-color var(--transition), box-shadow var(--transition);
+			}
+
+			.subscribe-form input[type="email"]::placeholder {
+				color: var(--spud-muted);
+			}
+
+			.subscribe-form input[type="email"]:focus {
+				border-color: var(--spud-gold);
+				box-shadow: 0 0 0 3px rgba(212,168,83,0.2);
+			}
+
+			.subscribe-form button {
+				padding: 14px 28px;
+				font-family: 'Space Grotesk', sans-serif;
+				font-size: 0.95rem;
+				font-weight: 600;
+				color: var(--spud-white);
+				background: var(--spud-dark);
+				border: 2px solid var(--spud-dark);
+				border-radius: var(--radius-sm);
+				cursor: pointer;
+				transition: all var(--transition);
+				white-space: nowrap;
+				position: relative;
+				overflow: hidden;
+			}
+
+			.subscribe-form button:hover {
+				background: var(--spud-charcoal);
+				transform: translateY(-1px);
+			}
+
+			.subscribe-form button:active {
+				transform: translateY(0);
+			}
+
+			.subscribe-form button.loading {
+				pointer-events: none;
+				opacity: 0.7;
+			}
+
+			.subscribe-msg {
+				text-align: center;
+				margin-top: 14px;
+				font-size: 0.9rem;
+				font-weight: 500;
+				min-height: 1.4em;
+			}
+
+			.subscribe-msg.success { color: var(--spud-green); }
+			.subscribe-msg.error { color: var(--spud-red); }
+
+			.subscribe-perks {
+				display: flex;
+				justify-content: center;
+				gap: 24px;
+				margin-top: 24px;
+				padding-top: 20px;
+				border-top: 1px solid rgba(0,0,0,0.06);
+			}
+
+			.perk {
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				font-size: 0.8rem;
+				color: var(--spud-muted);
+			}
+
+			.perk-icon {
+				font-size: 1rem;
+			}
+
+			/* ===== FEATURES STRIP ===== */
+			.features {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 16px;
+				margin-bottom: 64px;
+			}
+
+			.feature {
+				background: var(--spud-white);
+				border: 1.5px solid rgba(0,0,0,0.06);
+				border-radius: var(--radius-sm);
+				padding: 24px 20px;
+				text-align: center;
+				transition: all var(--transition);
+			}
+
+			.feature:hover {
+				border-color: var(--spud-gold);
+				transform: translateY(-2px);
+				box-shadow: var(--shadow-md);
+			}
+
+			.feature-icon {
+				font-size: 2rem;
+				margin-bottom: 12px;
+				display: block;
+			}
+
+			.feature h3 {
+				font-size: 0.9rem;
+				font-weight: 600;
+				color: var(--spud-dark);
+				margin-bottom: 4px;
+			}
+
+			.feature p {
+				font-size: 0.8rem;
+				color: var(--spud-muted);
+				line-height: 1.5;
+			}
+
+			/* ===== DIVIDER ===== */
+			.section-divider {
+				display: flex;
+				align-items: center;
+				gap: 16px;
+				margin-bottom: 48px;
+			}
+
+			.section-divider::before,
+			.section-divider::after {
+				content: '';
+				flex: 1;
+				height: 1.5px;
+				background: linear-gradient(90deg, transparent, var(--spud-warm), transparent);
+			}
+
+			.section-divider span {
+				font-size: 0.75rem;
+				font-weight: 600;
+				letter-spacing: 0.15em;
+				text-transform: uppercase;
+				color: var(--spud-muted);
+				white-space: nowrap;
+			}
+
+			/* ===== LATEST ISSUE ===== */
+			.latest-issue {
+				margin-bottom: 80px;
+			}
+
+			.issue-card {
+				background: var(--spud-white);
+				border: 1.5px solid rgba(0,0,0,0.06);
+				border-radius: var(--radius);
+				overflow: hidden;
+				box-shadow: var(--shadow-sm);
+			}
+
+			.issue-header {
+				padding: 32px 36px 24px;
+				border-bottom: 1px solid rgba(0,0,0,0.04);
+			}
+
+			.issue-date {
+				display: inline-flex;
+				align-items: center;
+				gap: 6px;
+				font-family: 'JetBrains Mono', monospace;
+				font-size: 0.75rem;
+				font-weight: 500;
+				color: var(--spud-muted);
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+				margin-bottom: 12px;
+			}
+
+			.issue-date::before {
+				content: '';
+				width: 8px;
+				height: 8px;
+				background: var(--spud-gold);
+				border-radius: 2px;
+				display: inline-block;
+			}
+
+			.issue-title {
+				font-family: 'Instrument Serif', Georgia, serif;
+				font-size: 2rem;
+				font-weight: 400;
+				color: var(--spud-dark);
+				line-height: 1.2;
+			}
+
+			.issue-body {
+				padding: 28px 36px 36px;
+			}
+
+			/* ===== NEWSLETTER CONTENT PROSE ===== */
+			.issue-body h3 {
+				font-family: 'Space Grotesk', sans-serif;
+				font-size: 1.15rem;
+				font-weight: 600;
+				color: var(--spud-dark);
+				margin: 28px 0 10px;
+				padding-left: 14px;
+				border-left: 3px solid var(--spud-gold);
+			}
+
+			.issue-body h3:first-child {
+				margin-top: 0;
+			}
+
+			.issue-body p {
+				color: var(--spud-text);
+				font-size: 1rem;
+				line-height: 1.75;
+				margin-bottom: 16px;
+			}
+
+			.issue-body img {
+				max-width: 100%;
+				height: auto;
+				border-radius: var(--radius-sm);
+				margin: 24px auto;
+				display: block;
+				border: 1px solid rgba(0,0,0,0.06);
+				box-shadow: var(--shadow-sm);
+			}
+
+			.issue-body a {
+				color: var(--spud-amber);
+				text-decoration: underline;
+				text-underline-offset: 2px;
+				transition: color var(--transition);
+			}
+
+			.issue-body a:hover {
+				color: var(--spud-brown);
+			}
+
+			.issue-body em {
+				color: var(--spud-muted);
+			}
+
+			/* ===== FOOTER ===== */
+			.site-footer {
+				padding: 40px 0 60px;
+				text-align: center;
+				border-top: 1.5px solid rgba(0,0,0,0.06);
+			}
+
+			.footer-logo {
+				font-size: 1.8rem;
+				margin-bottom: 12px;
+			}
+
+			.footer-text {
+				font-size: 0.8rem;
+				color: var(--spud-muted);
+				margin-bottom: 12px;
+				line-height: 1.6;
+			}
+
+			.footer-links {
+				display: flex;
+				justify-content: center;
+				gap: 20px;
+			}
+
+			.footer-links a {
+				font-size: 0.8rem;
+				color: var(--spud-muted);
+				text-decoration: none;
+				transition: color var(--transition);
+			}
+
+			.footer-links a:hover {
+				color: var(--spud-amber);
+			}
+
+			/* ===== SUCCESS STATE ===== */
+			.subscribe-success {
+				text-align: center;
+				padding: 8px 0;
+			}
+
+			.subscribe-success .success-icon {
+				font-size: 2.5rem;
+				margin-bottom: 8px;
+				display: block;
+				animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+			}
+
+			@keyframes popIn {
+				0% { transform: scale(0); opacity: 0; }
+				100% { transform: scale(1); opacity: 1; }
+			}
+
+			.subscribe-success h3 {
+				font-family: 'Instrument Serif', Georgia, serif;
+				font-size: 1.4rem;
+				color: var(--spud-dark);
+				margin-bottom: 4px;
+			}
+
+			.subscribe-success p {
+				color: var(--spud-muted);
+				font-size: 0.9rem;
+			}
+
+			/* ===== RESPONSIVE ===== */
+			@media (max-width: 640px) {
+				.hero {
+					padding: 56px 0 36px;
+				}
+
+				.hero-logo {
+					font-size: 3.5rem;
+				}
+
+				.hero h1 {
+					font-size: 2.6rem;
+				}
+
+				.hero-subtitle {
+					font-size: 1.05rem;
+				}
+
+				.subscribe-card {
+					padding: 28px 20px;
+				}
+
+				.subscribe-form {
+					flex-direction: column;
+				}
+
+				.subscribe-form button {
+					width: 100%;
+				}
+
+				.subscribe-perks {
+					flex-direction: column;
+					align-items: center;
+					gap: 10px;
+				}
+
+				.features {
+					grid-template-columns: 1fr;
+					gap: 12px;
+				}
+
+				.feature {
+					display: flex;
+					align-items: center;
+					text-align: left;
+					gap: 16px;
+					padding: 18px 20px;
+				}
+
+				.feature-icon {
+					margin-bottom: 0;
+					font-size: 1.6rem;
+					flex-shrink: 0;
+				}
+
+				.feature-content h3 {
+					margin-bottom: 2px;
+				}
+
+				.issue-header,
+				.issue-body {
+					padding-left: 20px;
+					padding-right: 20px;
+				}
+
+				.issue-title {
+					font-size: 1.6rem;
+				}
+
+				.issue-body h3 {
+					font-size: 1.05rem;
+				}
+			}
+
+			/* ===== REDUCED MOTION ===== */
+			@media (prefers-reduced-motion: reduce) {
+				.hero-logo { animation: none; }
+				.hero-badge .dot { animation: none; }
+				.subscribe-success .success-icon { animation: none; }
+				* { transition-duration: 0.01ms !important; }
+			}
+		</style>
 	</head>
-	<body class="bg-amber-50 text-gray-900 font-serif max-w-3xl mx-auto p-8">
-		<header class="mb-12 border-b-2 border-gray-900 pb-4 flex justify-between items-end">
-			<div>
-                <h1 class="text-6xl font-bold uppercase tracking-tighter">The Daily Spud</h1>
-			    <p class="text-xl italic mt-2">AI News & Absurdist Cartoons. Delivered by an Agent.</p>
-            </div>
-		</header>
+	<body>
+		<div class="page-wrapper">
+			<!-- HERO -->
+			<header class="hero">
+				<div class="hero-badge">
+					<span class="dot"></span>
+					Delivered daily by an AI agent
+				</div>
+				<span class="hero-logo" aria-hidden="true">🥔</span>
+				<h1>The Daily <em>Spud</em></h1>
+				<p class="hero-subtitle">
+					Your morning briefing on AI — with absurdist cartoons and zero fluff. 
+					Written &amp; curated by an agent, for humans.
+				</p>
+			</header>
 
-        <div class="bg-white border-2 border-gray-900 p-6 mb-12 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-            <h3 class="text-xl font-bold uppercase mb-2">Subscribe to the Madness</h3>
-            <p class="mb-4 text-gray-600">Get the briefing in your inbox every morning. No spam, just potatoes.</p>
-            <form action="/api/subscribe" method="POST" class="flex gap-2" id="subForm">
-                <input type="email" name="email" placeholder="your@email.com" required class="flex-1 p-2 border-2 border-gray-900 font-sans focus:outline-none focus:ring-2 focus:ring-amber-400" />
-                <button type="submit" class="bg-gray-900 text-white font-bold uppercase px-6 py-2 hover:bg-gray-800 transition-colors">Join</button>
-            </form>
-            <p id="msg" class="mt-2 text-sm font-sans font-bold"></p>
-        </div>
+			<!-- SUBSCRIBE -->
+			<div class="subscribe-card" id="subscribe-card">
+				<div class="subscribe-header">
+					<h2>Join the Briefing</h2>
+					<p>Free. Every morning. Unsubscribe anytime.</p>
+				</div>
+				<form action="/api/subscribe" method="POST" class="subscribe-form" id="subForm">
+					<input 
+						type="email" 
+						name="email" 
+						placeholder="you@email.com" 
+						required 
+						autocomplete="email"
+						aria-label="Email address"
+					/>
+					<button type="submit" id="subBtn">
+						Subscribe
+					</button>
+				</form>
+				<p class="subscribe-msg" id="msg" role="status" aria-live="polite"></p>
+				<div class="subscribe-perks">
+					<span class="perk"><span class="perk-icon">⚡</span> AI news distilled</span>
+					<span class="perk"><span class="perk-icon">🎨</span> Original cartoons</span>
+					<span class="perk"><span class="perk-icon">🚫</span> Zero spam</span>
+				</div>
+			</div>
 
-        <script>
-            const form = document.getElementById('subForm');
-            const msg = document.getElementById('msg');
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const formData = new FormData(form);
-                const res = await fetch('/api/subscribe', {
-                    method: 'POST',
-                    body: formData
-                });
-                const data = await res.json();
-                if (res.ok) {
-                    msg.textContent = "🥔 You're in!";
-                    msg.classList.add('text-green-600');
-                    form.reset();
-                } else {
-                    msg.textContent = "Error: " + data.message;
-                    msg.classList.add('text-red-600');
-                }
-            });
-        </script>
-		
-		<main class="prose prose-lg prose-amber">
-			<article>
-				<h2 class="text-4xl font-bold mb-2">{latestPost.data.title}</h2>
-				<time class="block text-gray-500 mb-8">{latestPost.data.date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</time>
+			<!-- FEATURES -->
+			<div class="features">
+				<div class="feature">
+					<span class="feature-icon">🧠</span>
+					<div class="feature-content">
+						<h3>AI-Curated</h3>
+						<p>An agent reads the firehose so you don't have to</p>
+					</div>
+				</div>
+				<div class="feature">
+					<span class="feature-icon">🖼️</span>
+					<div class="feature-content">
+						<h3>Daily Cartoons</h3>
+						<p>Absurdist AI-generated art in every issue</p>
+					</div>
+				</div>
+				<div class="feature">
+					<span class="feature-icon">☕</span>
+					<div class="feature-content">
+						<h3>2-Min Read</h3>
+						<p>Sharp takes, no filler — perfect with coffee</p>
+					</div>
+				</div>
+			</div>
+
+			<!-- LATEST ISSUE -->
+			<div class="section-divider">
+				<span>Latest Issue</span>
+			</div>
+
+			<section class="latest-issue">
+				<div class="issue-card">
+					<div class="issue-header">
+						<time class="issue-date">
+							{latestPost.data.date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+						</time>
+						<h2 class="issue-title">{latestPost.data.title}</h2>
+					</div>
+					<div class="issue-body">
+						<Content />
+					</div>
+				</div>
+			</section>
+
+			<!-- FOOTER -->
+			<footer class="site-footer">
+				<div class="footer-logo">🥔</div>
+				<p class="footer-text">
+					Orchestrated by Spud (OpenClaw) · Built with Astro · Hosted on a Mac Mini
+				</p>
+				<div class="footer-links">
+					<a href="/rss.xml">RSS Feed</a>
+					<a href="#subscribe-card">Subscribe</a>
+				</div>
+			</footer>
+		</div>
+
+		<script>
+			const form = document.getElementById('subForm') as HTMLFormElement;
+			const msg = document.getElementById('msg') as HTMLElement;
+			const btn = document.getElementById('subBtn') as HTMLButtonElement;
+			const card = document.getElementById('subscribe-card') as HTMLElement;
+
+			form.addEventListener('submit', async (e) => {
+				e.preventDefault();
 				
-				<Content />
-			</article>
-		</main>
+				// Loading state
+				btn.classList.add('loading');
+				btn.textContent = 'Subscribing...';
+				msg.textContent = '';
+				msg.className = 'subscribe-msg';
 
-		<footer class="mt-16 pt-8 border-t border-gray-300 text-center text-sm text-gray-500">
-			<p>Orchestrated by Spud (OpenClaw) • Built with Astro • Hosted on Spud's Mac Mini</p>
-			<a href="/rss.xml" class="underline">RSS Feed</a>
-		</footer>
+				try {
+					const formData = new FormData(form);
+					const res = await fetch('/api/subscribe', {
+						method: 'POST',
+						body: formData,
+					});
+					const data = await res.json();
+
+					if (res.ok) {
+						// Replace form with success state
+						const header = card.querySelector('.subscribe-header') as HTMLElement;
+						const formEl = card.querySelector('.subscribe-form') as HTMLElement;
+						const perks = card.querySelector('.subscribe-perks') as HTMLElement;
+						msg.remove();
+						formEl.remove();
+						perks.remove();
+
+						header.innerHTML = `
+							<div class="subscribe-success">
+								<span class="success-icon">🥔✨</span>
+								<h3>You're in!</h3>
+								<p>Check your inbox — your first spud is on the way.</p>
+							</div>
+						`;
+					} else {
+						msg.textContent = data.message || 'Something went wrong. Try again?';
+						msg.className = 'subscribe-msg error';
+						btn.classList.remove('loading');
+						btn.textContent = 'Subscribe';
+					}
+				} catch (err) {
+					msg.textContent = 'Network error. Please try again.';
+					msg.className = 'subscribe-msg error';
+					btn.classList.remove('loading');
+					btn.textContent = 'Subscribe';
+				}
+			});
+		</script>
 	</body>
 </html>

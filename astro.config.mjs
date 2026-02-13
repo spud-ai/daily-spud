@@ -4,8 +4,7 @@ import node from '@astrojs/node';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://spud-ai.github.io', // We can update this to the funnel URL later
-  base: '/daily-spud',
+  // site will be set once we have a proper domain
   output: 'server',
   adapter: node({
     mode: 'standalone',
