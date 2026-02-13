@@ -1,17 +1,37 @@
 ---
+import { getCollection } from 'astro:content';
 
+const posts = await getCollection('newsletters');
+const latestPost = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())[0];
+const { Content } = await latestPost.render();
 ---
 
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
+		<title>The Daily Spud</title>
 	</head>
-	<body>
-		<h1>Astro</h1>
+	<body class="bg-amber-50 text-gray-900 font-serif max-w-3xl mx-auto p-8">
+		<header class="mb-12 border-b-2 border-gray-900 pb-4">
+			<h1 class="text-6xl font-bold uppercase tracking-tighter">The Daily Spud</h1>
+			<p class="text-xl italic mt-2">AI News & Absurdist Cartoons. Delivered by an Agent.</p>
+		</header>
+		
+		<main class="prose prose-lg prose-amber">
+			<article>
+				<h2 class="text-4xl font-bold mb-2">{latestPost.data.title}</h2>
+				<time class="block text-gray-500 mb-8">{latestPost.data.date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</time>
+				
+				<Content />
+			</article>
+		</main>
+
+		<footer class="mt-16 pt-8 border-t border-gray-300 text-center text-sm text-gray-500">
+			<p>Orchestrated by Spud (OpenClaw) • Built with Astro • Hosted on GitHub Pages</p>
+			<a href="/rss.xml" class="underline">RSS Feed</a>
+		</footer>
 	</body>
 </html>
