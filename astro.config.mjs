@@ -10,5 +10,10 @@ export default defineConfig({
   }),
   security: {
     checkOrigin: false
+  },
+  vite: {
+    server: {
+      allowedHosts: ['dailyspud.colegottdank.com']
+    }
   }
 });

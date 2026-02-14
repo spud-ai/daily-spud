@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 // const PUBLIC_URL = 'https://raw.githubusercontent.com/spud-ai/daily-spud/main/public';
-const PUBLIC_URL = 'https://dailyspud.colegottdank.com';
+const PUBLIC_URL = 'https://raw.githubusercontent.com/spud-ai/daily-spud/main/public';
 const RECIPIENTS = ['colegottdank@gmail.com'];
 
 if (!RESEND_API_KEY) {
