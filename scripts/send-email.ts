@@ -19,7 +19,7 @@ const resend = new Resend(RESEND_API_KEY);
 // Find today's newsletter
 const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
 // Or just look for the specific file we know exists
-const targetDate = '2026-02-13'; 
+const targetDate = '2026-02-14'; 
 const filePath = path.join(__dirname, '../src/content/newsletters', `${targetDate}.md`);
 
 if (!fs.existsSync(filePath)) {
@@ -78,6 +78,14 @@ function parseMarkdownToHtml(markdown: string): string {
       continue;
     }
     
+    // Check for H4 headers: #### text
+    if (/^####\s+(.+)$/.test(trimmed)) {
+      flushParagraph();
+      const headerText = trimmed.replace(/^####\s+/, '');
+      blocks.push(`<h4 style="font-family: Georgia, serif; font-size: 18px; color: #8B4513; margin-top: 24px; margin-bottom: 8px; font-weight: bold; font-style: italic;">${processInlineMarkdown(headerText)}</h4>`);
+      continue;
+    }
+
     // Check for H3 headers: ### text (any amount of leading whitespace trimmed)
     if (/^###\s+(.+)$/.test(trimmed)) {
       flushParagraph();
