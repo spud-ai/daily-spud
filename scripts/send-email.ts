@@ -19,7 +19,7 @@ const resend = new Resend(RESEND_API_KEY);
 // Find today's newsletter
 const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
 // Or just look for the specific file we know exists
-const targetDate = '2026-02-14'; 
+const targetDate = '2026-02-15'; 
 const filePath = path.join(__dirname, '../src/content/newsletters', `${targetDate}.md`);
 
 if (!fs.existsSync(filePath)) {
