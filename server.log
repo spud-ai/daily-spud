@@ -1,1 +1,65 @@
-15:43:11 [@astrojs/node] Server listening on http://localhost:4321
+
+> daily-spud@0.0.1 dev
+> astro dev --host
+
+17:51:55 [@astrojs/node] Enabling sessions with filesystem storage
+17:51:55 [types] Generated 0ms
+17:51:55 [content] Syncing content
+17:51:55 [content] Synced content
+
+ astro  v5.17.2 ready in 268 ms
+
+┃ Local    http://localhost:4321/
+┃ Network  http://192.168.68.103:4321/
+           http://100.92.182.16:4321/
+
+17:51:55 watching for file changes...
+17:52:01 [200] / 15ms
+17:52:14 [200] / 4ms
+17:53:02 [200] / 11ms
+17:58:49 [watch] scripts/debug-email.html
+17:59:42 [watch] scripts/debug-email.html
+18:02:27 [watch] scripts/debug-email.html
+18:35:31 [200] / 22ms
+21:25:07 [watch] scripts/debug-email.html
+22:02:24 [200] / 22ms
+22:11:08 [watch] scripts/debug-email.html
+22:16:30 [watch] src/pages/index.astro
+22:16:31 [200] / 9ms
+22:16:34 [200] / 10ms
+22:16:35 [watch] src/pages/index.astro
+22:16:37 [200] /archive 4ms
+22:16:41 [200] /archive 2ms
+22:16:41 [ERROR] Cannot read properties of undefined (reading 'render')
+  Stack trace:
+    at /Users/spud/.openclaw/workspace/daily-spud/src/pages/issue/[slug].astro:13:32
+    [...] See full stack trace in the browser, or rerun with --verbose.
+22:16:41 [ERROR] Cannot read properties of undefined (reading 'render')
+  Stack trace:
+    at /Users/spud/.openclaw/workspace/daily-spud/src/pages/issue/[slug].astro:13:32
+    [...] See full stack trace in the browser, or rerun with --verbose.
+22:16:46 [ERROR] Cannot read properties of undefined (reading 'render')
+  Stack trace:
+    at /Users/spud/.openclaw/workspace/daily-spud/src/pages/issue/[slug].astro:13:32
+    [...] See full stack trace in the browser, or rerun with --verbose.
+22:16:56 [200] /archive 7ms
+22:17:02 [302] /issue/2026-02-15 1ms
+22:17:02 [302] /issue/2026-02-12 1ms
+22:17:08 [200] /archive 1ms
+22:17:14 [watch] /src/pages/archive.astro?astro&type=style&index=0&lang.css
+22:17:14 [200] /archive 4ms
+22:17:26 [200] /issue/2026-02-15 5ms
+22:17:26 [200] /issue/2026-02-12 1ms
+22:17:26 [200] /archive 2ms
+22:18:02 [200] /archive 10ms
+22:30:06 [200] /archive 10ms
+22:45:44 [200] /archive 7ms
+22:53:17 [200] /archive 8ms
+22:54:24 [200] /archive 1ms
+23:00:31 [200] /archive 8ms
+23:02:31 [200] /archive 7ms
+23:25:08 [200] /archive 10ms
+00:00:13 [200] /archive 15ms
+00:52:18 [200] /archive 15ms
+10:08:04 [glob-loader] Reloaded data from 2026-02-16.md
+10:08:04 [glob-loader] Reloaded data from 2026-02-16.md

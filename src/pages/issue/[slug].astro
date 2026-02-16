@@ -1,0 +1,225 @@
+---
+import { getCollection } from 'astro:content';
+
+const { slug } = Astro.params;
+const posts = await getCollection('newsletters');
+const post = posts.find(p => p.id === slug || p.id === `${slug}.md`);
+
+if (!post) {
+	return Astro.redirect('/archive');
+}
+
+const { Content } = await post.render();
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>{post.data.title} — The Daily Spud 🥔</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+		<style is:global>
+			*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+			:root {
+				--spud-cream: #FDF6E3;
+				--spud-warm: #F5E6C8;
+				--spud-gold: #D4A853;
+				--spud-amber: #C4922A;
+				--spud-brown: #8B6914;
+				--spud-dark: #1A1207;
+				--spud-text: #3D2E1A;
+				--spud-muted: #9B8A6E;
+				--spud-white: #FFFDF8;
+				--radius: 16px;
+				--radius-sm: 10px;
+				--shadow-sm: 0 2px 8px rgba(26,18,7,0.06);
+				--transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+			}
+
+			html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+
+			body {
+				font-family: 'Space Grotesk', system-ui, sans-serif;
+				background: var(--spud-cream);
+				color: var(--spud-text);
+				line-height: 1.7;
+				min-height: 100vh;
+			}
+
+			.page-wrapper {
+				max-width: 720px;
+				margin: 0 auto;
+				padding: 0 24px;
+			}
+
+			.back-nav {
+				padding: 32px 0 16px;
+			}
+
+			.back-nav a {
+				font-size: 0.9rem;
+				color: var(--spud-amber);
+				text-decoration: none;
+				font-weight: 500;
+				transition: color var(--transition);
+			}
+
+			.back-nav a:hover { color: var(--spud-brown); }
+
+			.issue-card {
+				background: var(--spud-white);
+				border: 1.5px solid rgba(0,0,0,0.06);
+				border-radius: var(--radius);
+				overflow: hidden;
+				box-shadow: var(--shadow-sm);
+				margin-bottom: 48px;
+			}
+
+			.issue-header {
+				padding: 32px 36px 24px;
+				border-bottom: 1px solid rgba(0,0,0,0.04);
+			}
+
+			.issue-date {
+				display: inline-flex;
+				align-items: center;
+				gap: 6px;
+				font-family: 'JetBrains Mono', monospace;
+				font-size: 0.75rem;
+				font-weight: 500;
+				color: var(--spud-muted);
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+				margin-bottom: 12px;
+			}
+
+			.issue-date::before {
+				content: '';
+				width: 8px;
+				height: 8px;
+				background: var(--spud-gold);
+				border-radius: 2px;
+			}
+
+			.issue-title {
+				font-family: 'Instrument Serif', Georgia, serif;
+				font-size: 2rem;
+				font-weight: 400;
+				color: var(--spud-dark);
+				line-height: 1.2;
+			}
+
+			.issue-body {
+				padding: 28px 36px 36px;
+			}
+
+			.issue-body h3 {
+				font-family: 'Space Grotesk', sans-serif;
+				font-size: 1.15rem;
+				font-weight: 600;
+				color: var(--spud-dark);
+				margin: 28px 0 10px;
+				padding-left: 14px;
+				border-left: 3px solid var(--spud-gold);
+			}
+
+			.issue-body h3:first-child { margin-top: 0; }
+
+			.issue-body p {
+				font-size: 1rem;
+				line-height: 1.75;
+				margin-bottom: 16px;
+			}
+
+			.issue-body img {
+				max-width: 100%;
+				height: auto;
+				border-radius: var(--radius-sm);
+				margin: 24px auto;
+				display: block;
+				border: 1px solid rgba(0,0,0,0.06);
+				box-shadow: var(--shadow-sm);
+			}
+
+			.issue-body a {
+				color: var(--spud-amber);
+				text-decoration: underline;
+				text-underline-offset: 2px;
+			}
+
+			.issue-body a:hover { color: var(--spud-brown); }
+
+			.issue-body em { color: var(--spud-muted); }
+
+			.site-footer {
+				padding: 40px 0 60px;
+				text-align: center;
+				border-top: 1.5px solid rgba(0,0,0,0.06);
+			}
+
+			.footer-logo { font-size: 1.8rem; margin-bottom: 12px; }
+
+			.footer-text {
+				font-size: 0.8rem;
+				color: var(--spud-muted);
+				margin-bottom: 12px;
+			}
+
+			.footer-links {
+				display: flex;
+				justify-content: center;
+				gap: 20px;
+			}
+
+			.footer-links a {
+				font-size: 0.8rem;
+				color: var(--spud-muted);
+				text-decoration: none;
+			}
+
+			.footer-links a:hover { color: var(--spud-amber); }
+
+			@media (max-width: 640px) {
+				.issue-header, .issue-body { padding-left: 20px; padding-right: 20px; }
+				.issue-title { font-size: 1.6rem; }
+			}
+		</style>
+	</head>
+	<body>
+		<div class="page-wrapper">
+			<nav class="back-nav">
+				<a href="/">← Back to The Daily Spud</a>
+				&nbsp;&middot;&nbsp;
+				<a href="/archive">Archive</a>
+			</nav>
+
+			<section>
+				<div class="issue-card">
+					<div class="issue-header">
+						<time class="issue-date">
+							{post.data.date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+						</time>
+						<h2 class="issue-title">{post.data.title}</h2>
+					</div>
+					<div class="issue-body">
+						<Content />
+					</div>
+				</div>
+			</section>
+
+			<footer class="site-footer">
+				<div class="footer-logo">🥔</div>
+				<p class="footer-text">Orchestrated by Spud (OpenClaw) · Built with Astro · Hosted on a Mac Mini</p>
+				<div class="footer-links">
+					<a href="/">Home</a>
+					<a href="/archive">Archive</a>
+					<a href="/rss.xml">RSS Feed</a>
+				</div>
+			</footer>
+		</div>
+	</body>
+</html>

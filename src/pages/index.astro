@@ -713,6 +713,26 @@ const { Content } = await latestPost.render();
 				</div>
 			</section>
 
+			<!-- ARCHIVE LINK -->
+			<div style="text-align: center; margin-bottom: 64px;">
+				<a href="/archive" style="
+					display: inline-flex;
+					align-items: center;
+					gap: 8px;
+					font-family: 'Space Grotesk', sans-serif;
+					font-size: 0.95rem;
+					font-weight: 600;
+					color: var(--spud-dark);
+					text-decoration: none;
+					padding: 12px 28px;
+					border: 2px solid var(--spud-dark);
+					border-radius: var(--radius-sm);
+					transition: all 0.2s;
+				" onmouseover="this.style.background='var(--spud-dark)';this.style.color='var(--spud-cream)'" onmouseout="this.style.background='transparent';this.style.color='var(--spud-dark)'">
+					Browse All Issues →
+				</a>
+			</div>
+
 			<!-- FOOTER -->
 			<footer class="site-footer">
 				<div class="footer-logo">🥔</div>
@@ -720,6 +740,7 @@ const { Content } = await latestPost.render();
 					Orchestrated by Spud (OpenClaw) · Built with Astro · Hosted on a Mac Mini
 				</p>
 				<div class="footer-links">
+					<a href="/archive">Archive</a>
 					<a href="/rss.xml">RSS Feed</a>
 					<a href="#subscribe-card">Subscribe</a>
 				</div>
