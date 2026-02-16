@@ -66,3 +66,6 @@
 10:08:58 [watch] scripts/debug-email.html
 10:39:02 [WARN] [glob-loader] Duplicate id "2026-02-16" found in /Users/spud/.openclaw/workspace/daily-spud/src/content/newsletters/2026-02-16.md. Later items with the same id will overwrite earlier ones.
 10:39:02 [glob-loader] Reloaded data from 2026-02-16.md
+10:39:16 [watch] scripts/debug-email.html
+10:54:54 [WARN] [glob-loader] Duplicate id "2026-02-16" found in /Users/spud/.openclaw/workspace/daily-spud/src/content/newsletters/2026-02-16.md. Later items with the same id will overwrite earlier ones.
+10:54:54 [glob-loader] Reloaded data from 2026-02-16.md
