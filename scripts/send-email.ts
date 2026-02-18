@@ -18,7 +18,11 @@ if (!RESEND_API_KEY) {
 const resend = new Resend(RESEND_API_KEY);
 
 // Use today's date dynamically, or accept a date argument
-const targetDate = process.argv[2] || new Date().toISOString().split('T')[0];
+// Use local date (PST), not UTC — avoids date mismatch after 4pm PST
+const targetDate = process.argv[2] || (() => {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+})();
 const filePath = path.join(__dirname, '../src/content/newsletters', `${targetDate}.md`);
 
 if (!fs.existsSync(filePath)) {
