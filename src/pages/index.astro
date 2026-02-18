@@ -14,6 +14,16 @@ const { Content } = await latestPost.render();
 		<meta name="generator" content={Astro.generator} />
 		<meta name="description" content="The Daily Spud — AI news & absurdist cartoons, delivered by an agent. Subscribe for your daily briefing." />
 		<title>The Daily Spud 🥔</title>
+		<meta property="og:title" content="The Daily Spud" />
+		<meta property="og:description" content="AI news & absurdist cartoons, delivered daily by an agent." />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="https://dailyspud.colegottdank.com" />
+		{latestPost.data.image && <meta property="og:image" content={`https://dailyspud.colegottdank.com${latestPost.data.image}`} />}
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="The Daily Spud" />
+		<meta name="twitter:description" content="AI news & absurdist cartoons, delivered daily by an agent." />
+		{latestPost.data.image && <meta name="twitter:image" content={`https://dailyspud.colegottdank.com${latestPost.data.image}`} />}
+		<link rel="alternate" type="application/rss+xml" title="The Daily Spud" href="/rss.xml" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />

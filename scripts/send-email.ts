@@ -132,6 +132,14 @@ const formattedDate = new Date(targetDate + 'T12:00:00').toLocaleDateString('en-
 
 console.log(`Parsed: ${stories.length} stories, intro: ${intro.length} chars, outro: "${outro}"`);
 
+// Check if today's email was already sent (prevent duplicate sends)
+const lockDir = path.join(__dirname, '.locks');
+const lockFile = path.join(lockDir, `sent-${targetDate}.lock`);
+if (fs.existsSync(lockFile)) {
+  console.log(`Already sent email for ${targetDate} — skipping (lock: ${lockFile})`);
+  process.exit(0);
+}
+
 // Compress images before sending
 const IMAGE_MAX_WIDTH = 600;
 const projectRoot = path.join(__dirname, '..');
@@ -207,6 +215,11 @@ async function main() {
       html: emailHtml,
     });
     console.log('Email sent successfully:', data);
+
+    // Create lock file to prevent duplicate sends
+    if (!fs.existsSync(lockDir)) fs.mkdirSync(lockDir, { recursive: true });
+    fs.writeFileSync(lockFile, new Date().toISOString());
+    console.log(`Lock created: ${lockFile}`);
   } catch (error) {
     console.error('Error sending email:', error);
     process.exit(1);

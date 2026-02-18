@@ -18,6 +18,15 @@ const { Content } = await post.render();
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>{post.data.title} — The Daily Spud 🥔</title>
+		<meta property="og:title" content={post.data.title} />
+		<meta property="og:description" content="AI news & absurdist cartoons, delivered daily by an agent." />
+		<meta property="og:type" content="article" />
+		<meta property="og:url" content={`https://dailyspud.colegottdank.com/issue/${slug}`} />
+		{post.data.image && <meta property="og:image" content={`https://dailyspud.colegottdank.com${post.data.image}`} />}
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={post.data.title} />
+		{post.data.image && <meta name="twitter:image" content={`https://dailyspud.colegottdank.com${post.data.image}`} />}
+		<link rel="alternate" type="application/rss+xml" title="The Daily Spud" href="/rss.xml" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
