@@ -38,6 +38,24 @@ const posts = (await getCollection('newsletters'))
 				--shadow-sm: 0 2px 8px rgba(26,18,7,0.06);
 				--shadow-brutal: 5px 5px 0px var(--spud-dark);
 				--transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+				--border-subtle: rgba(0,0,0,0.06);
+				--border-faint: rgba(0,0,0,0.04);
+			}
+
+			[data-theme="dark"] {
+				--spud-cream: #1A1408;
+				--spud-warm: #2A2011;
+				--spud-gold: #D4A853;
+				--spud-amber: #E0A73B;
+				--spud-brown: #C49A3A;
+				--spud-dark: #F5E6C8;
+				--spud-text: #D4C4A8;
+				--spud-muted: #A08F73;
+				--spud-white: #2D2416;
+				--shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+				--shadow-brutal: 5px 5px 0px rgba(212,168,83,0.2);
+				--border-subtle: rgba(255,255,255,0.12);
+				--border-faint: rgba(255,255,255,0.06);
 			}
 
 			html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
@@ -94,11 +112,11 @@ const posts = (await getCollection('newsletters'))
 			}
 
 			.archive-item {
-				border-bottom: 1px solid rgba(0,0,0,0.06);
+				border-bottom: 1px solid var(--border-subtle);
 			}
 
 			.archive-item:first-child {
-				border-top: 1px solid rgba(0,0,0,0.06);
+				border-top: 1px solid var(--border-subtle);
 			}
 
 			.archive-link {
@@ -151,7 +169,7 @@ const posts = (await getCollection('newsletters'))
 			.site-footer {
 				padding: 40px 0 60px;
 				text-align: center;
-				border-top: 1.5px solid rgba(0,0,0,0.06);
+				border-top: 1.5px solid var(--border-subtle);
 			}
 
 			.footer-logo { font-size: 1.8rem; margin-bottom: 12px; }
@@ -176,15 +194,57 @@ const posts = (await getCollection('newsletters'))
 
 			.footer-links a:hover { color: var(--spud-amber); }
 
+			/* ===== THEME TOGGLE ===== */
+			.theme-toggle {
+				position: fixed;
+				top: 20px;
+				right: 20px;
+				z-index: 100;
+				background: var(--spud-white);
+				border: 1.5px solid var(--border-subtle);
+				border-radius: 50%;
+				width: 44px;
+				height: 44px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				cursor: pointer;
+				color: var(--spud-dark);
+				box-shadow: var(--shadow-sm);
+				transition: all var(--transition);
+			}
+
+			.theme-toggle:hover {
+				border-color: var(--spud-gold);
+				box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+				transform: scale(1.05);
+			}
+
+			.theme-toggle .sun-icon { display: none; }
+			.theme-toggle .moon-icon { display: block; }
+			[data-theme="dark"] .theme-toggle .sun-icon { display: block; }
+			[data-theme="dark"] .theme-toggle .moon-icon { display: none; }
+
 			@media (max-width: 640px) {
 				.archive-header h1 { font-size: 2rem; }
 				.archive-link { flex-wrap: wrap; gap: 4px; }
 				.archive-link-date { width: 100%; }
 			}
 		</style>
+		<script is:inline>
+			(function() {
+				var s = localStorage.getItem('spud-theme');
+				if (s === 'dark' || s === 'light') { document.documentElement.setAttribute('data-theme', s); return; }
+				if (window.matchMedia('(prefers-color-scheme: dark)').matches) document.documentElement.setAttribute('data-theme', 'dark');
+			})();
+		</script>
 	</head>
 	<body>
 		<div class="page-wrapper">
+			<button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+				<svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+				<svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+			</button>
 			<nav class="back-nav">
 				<a href="/">← Back to The Daily Spud</a>
 			</nav>
@@ -219,5 +279,22 @@ const posts = (await getCollection('newsletters'))
 				</div>
 			</footer>
 		</div>
+		<script is:inline>
+			(function() {
+				var toggle = document.getElementById('themeToggle');
+				if (!toggle) return;
+				toggle.addEventListener('click', function() {
+					var current = document.documentElement.getAttribute('data-theme');
+					var next = current === 'dark' ? 'light' : 'dark';
+					document.documentElement.setAttribute('data-theme', next);
+					localStorage.setItem('spud-theme', next);
+				});
+				window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+					if (!localStorage.getItem('spud-theme')) {
+						document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+					}
+				});
+			})();
+		</script>
 	</body>
 </html>
