@@ -1,0 +1,5 @@
+node_modules/
+dist/
+.last-published
+scripts/.locks/
+scripts/debug-email.html
