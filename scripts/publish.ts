@@ -132,17 +132,26 @@ if (!RESEND_API_KEY) {
       publicUrl: PUBLIC_URL,
     });
 
-    // Send via Resend
+    // Send via Resend (per-recipient for personalized unsubscribe links)
     const { Resend } = await import('resend');
     const resend = new Resend(RESEND_API_KEY);
     try {
-      const data = await resend.emails.send({
-        from: 'The Daily Spud <spud@colegottdank.com>',
-        to: RECIPIENTS,
-        subject: `🥔 The Daily Spud: ${briefing.title}`,
-        html: emailHtml,
-      });
-      log(`Email sent: ${JSON.stringify(data)}`);
+      for (const recipient of RECIPIENTS) {
+        const unsubscribeUrl = `${PUBLIC_URL}/api/unsubscribe?email=${encodeURIComponent(recipient)}`;
+        const personalizedHtml = emailHtml.replace('{{UNSUBSCRIBE_URL}}', unsubscribeUrl);
+
+        const data = await resend.emails.send({
+          from: 'The Daily Spud <spud@colegottdank.com>',
+          to: [recipient],
+          subject: `🥔 The Daily Spud: ${briefing.title}`,
+          html: personalizedHtml,
+          headers: {
+            'List-Unsubscribe': `<${unsubscribeUrl}>`,
+            'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+          },
+        });
+        log(`Email sent to ${recipient}: ${JSON.stringify(data)}`);
+      }
 
       // Create lock
       if (!fs.existsSync(lockDir)) fs.mkdirSync(lockDir, { recursive: true });

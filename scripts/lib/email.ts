@@ -100,10 +100,11 @@ export interface EmailData {
   stories: ParsedStory[];
   outro: string;
   publicUrl?: string;
+  unsubscribeUrl?: string;
 }
 
 export function buildEmailHtml(template: string, data: EmailData): string {
-  const { date, intro, stories, outro, publicUrl } = data;
+  const { date, intro, stories, outro, publicUrl, unsubscribeUrl } = data;
 
   let html = template;
 
@@ -115,6 +116,7 @@ export function buildEmailHtml(template: string, data: EmailData): string {
   html = html.replace('{{DATE}}', date);
   html = html.replace('{{INTRO}}', intro);
   html = html.replace('{{OUTRO}}', outro);
+  html = html.replace('{{UNSUBSCRIBE_URL}}', unsubscribeUrl || '#');
 
   return html;
 }
